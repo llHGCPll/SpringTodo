@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>todo 목록</title>
+</head>
+<body>
+
+<div layout:fragment="content" class="col-sm-12">
+    <form th:action="@{/todos/create}" th:object="${todoForm}" class="form-horizontal" method="post">
+        <fieldset>
+            <legend>할일 작성</legend>
+
+
+            <div class="form-group">
+                <label for="lastName" class="col-sm-2 control-label">설명</label>
+
+                <div class="col-sm-10">
+                    <input type="text" id="lastName" name="lastName" th:field="*{description}"
+                           class="form-control" value="java"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName" class="col-sm-2 control-label">카테고리</label>
+
+                <div class="col-sm-10">
+                    <input type="text" id="firstName" name="firstName" th:field="*{category}"
+                           class="form-control" value="program"/>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">작성</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <hr/>
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th>ID</th>
+            <th>설명</th>
+            <th>종료</th>
+            <th>카테고리</th>
+            <th colspan="2">편집</th>
+        </tr>
+        <tr th:each="todo : ${todos}">
+            <td th:text="${todo.id}">100</td>
+            <td th:text="${todo.description}">설명</td>
+            <td th:text="${todo.finish}">종료</td>
+            <td th:text="${todo.category}">카테고리</td>
+            <td>
+                <form th:action="@{/todos/edit}" method="get">
+                    <input class="btn btn-default" type="submit" name="form" value="편집"/>
+                    <input type="hidden" name="id" th:value="${todo.id}"/>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/todos/delete}" method="post">
+                    <input class="btn btn-danger" type="submit" value="삭제"/>
+                    <input type="hidden" name="id" th:value="${todo.id}"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

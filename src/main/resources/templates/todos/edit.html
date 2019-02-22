@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>todo 편집</title>
+</head>
+<body>
+<div layout:fragment="content" class="col-sm-12">
+    <form th:action="@{/todos/edit}" th:object="${todoForm}" class="form-horizontal" method="post">
+        <fieldset>
+            <legend>todo 편집</legend>
+            <div class="form-group">
+                <label for="description" class="col-sm-2 control-label">설명</label>
+
+                <div class="col-sm-10">
+                    <input type="text" id="description" name="description" th:field="*{description}"
+                           class="form-control" value="python"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="category" class="col-sm-2 control-label">카테고리</label>
+
+                <div class="col-sm-10">
+                    <input type="text" id="category" name="category" th:field="*{category}"
+                           class="form-control" value="coding"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" class="btn btn-default" name="goToTop" value="돌아가기"/>
+                    <input type="hidden" name="id" th:value="${param.id[0]}"/>
+                    <input type="submit" class="btn btn-primary" value="업데이트"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
