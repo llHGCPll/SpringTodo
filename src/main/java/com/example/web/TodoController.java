@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("todos")
@@ -30,7 +31,24 @@ public class TodoController {
   @RequestMapping(method = RequestMethod.GET)
   String list(Model model) {
     List<Todo> todoList = todoService.findAll();
-    model.addAttribute("todos", todoList);
+
+    List<Todo> trueList = null;
+    List<Todo> falseList = null;
+
+    trueList = todoList.stream().filter(x -> x.getFinish() == true).collect(Collectors.toList());
+    falseList = todoList.stream().filter(x -> x.getFinish() == false).collect(Collectors.toList());
+
+//    for (Todo todo : todoList) {
+//      if (todo.getFinish()) {
+//        trueList.add(todo);
+//      } else {
+//        trueList.add(todo);
+//      }
+//    }
+
+    model.addAttribute("falseList", falseList);
+    model.addAttribute("trueList", trueList);
+
     return "todos/list";
   }
 
@@ -72,6 +90,14 @@ public class TodoController {
   @RequestMapping(value = "delete", method = RequestMethod.POST)
   String delete(@RequestParam Integer id) {
     todoService.delete(id);
+    return "redirect:/todos";
+  }
+
+  @RequestMapping(value = "finish", method = RequestMethod.POST)
+  String finish(@RequestParam Integer id) {
+    Todo todo = todoService.findOne(id);
+    todo.setFinish(!todo.getFinish());
+    todoService.update(todo);
     return "redirect:/todos";
   }
 }
